@@ -1,6 +1,7 @@
 export class Field {
     
     state = [];
+
     canvasX = 0;
     canvasY = 0;
 
@@ -9,6 +10,19 @@ export class Field {
         this.canvas = canvas;
         this.fieldSize = fieldSize;
         this.cellSize = cellSize;
+        this.ctx = this.canvas.getContext('2d');
+    }
+
+    setup() {
+
+        this.canvas.width = this.fieldSize * this.cellSize;
+        this.canvas.height = this.fieldSize * this.cellSize;     
+    
+        this.canvasX = this.canvas.offsetLeft + this.canvas.clientLeft;
+        this.canvasY = this.canvas.offsetTop + this.canvas.clientTop;
+        
+        this.canvas.addEventListener('click', this.clickHandler.bind(this));
+
     }
 
     initFieldState(Cell) {        
@@ -18,43 +32,49 @@ export class Field {
                 this.state.push(new Cell(x, y, this.cellSize, "dead"));
             }
         }        
-
-    }
-
-    setup() {
-
-        this.canvas.width = this.fieldSize * this.cellSize;
-        this.canvas.height = this.fieldSize * this.cellSize;
-
-        this.canvasX = this.canvas.offsetLeft + this.canvas.clientLeft;
-        this.canvasY = this.canvas.offsetTop + this.canvas.clientTop;
-
-        this.canvas.addEventListener('click', this.clickHandler, false);
-        this.canvas.clsInstant = this;
     }
 
     clickHandler(e) {        
 
-        const canvasX = e.currentTarget.this.canvasX;
-        const canvasY = e.currentTarget.this.canvasY;
-        let state = e.currentTarget.this.state;
-        const draw = e.currentTarget.this.draw
+        let x = e.pageX - this.canvasX;
+        let y = e.pageY - this.canvasY;
+    
+        this.state.forEach( (cell) => {
 
-        let x = e.pageX - canvasX;
-        let y = e.pageY - canvasY;
+            const cellX = cell.getCoord('x');
+            const cellY = cell.getCoord('y');
+            const size = cell.getSize();
 
-        state.forEach(function(cell) {
-            if (y > cell.y * cell.size && y < cell.y * cell.size + cell.size 
-                && x > cell.x * cell.size && x < cell.x * cell.size + cell.size) {
+            if (y > cellY && y < cellY + size 
+                && x > cellX && x < cellX + size ) {
                 
-                if (cell.type == "dead"){
+                if (cell.getType() == "dead"){
                     cell.setType("alive");
                 } else {
                     cell.setType("dead");
                 }
-
-                draw(e.currentTarget.this);
+    
+                this.draw();
             }
         });
+    }
+
+    draw() {      
+
+        this.state.forEach( (cell) => {
+
+            const x = cell.getCoord('x');
+            const y = cell.getCoord('y');
+            const size = cell.getSize();
+
+            if (cell.getType() == "dead"){
+                this.ctx.clearRect(x, y, size, size);    
+                this.ctx.strokeRect(x, y, size, size);    
+            } else {
+                this.ctx.fillRect(x, y, size, size);    
+            }
+            
+        });      
+    
     }
 }

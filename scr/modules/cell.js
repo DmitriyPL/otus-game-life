@@ -1,5 +1,5 @@
 export class Cell {
-    
+
     constructor(x, y, size, type) {   
         this.x = x,
         this.y = y,    
@@ -9,6 +9,18 @@ export class Cell {
 
     setType(type){
         this.type = type;
+    }
+
+    getType() {
+        return this.type;
+    }
+
+    getCoord(coord) {
+        return this[coord] * this.size;
+    }
+
+    getSize() {
+        return this.size;
     }
 
 }
