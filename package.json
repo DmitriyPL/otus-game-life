@@ -1,0 +1,27 @@
+{
+  "name": "otus-game-life",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DmitriyPL/otus-game-life.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DmitriyPL/otus-game-life/issues"
+  },
+  "homepage": "https://github.com/DmitriyPL/otus-game-life#readme",
+  "devDependencies": {
+    "jest": "^28.1.0"
+  },
+  "dependencies": {
+    "@types/live-server": "^1.2.1"
+  }
+}
