@@ -9,4 +9,6 @@ export class Cell {
 
     setType(type){
         this.type = type;
-    
+    }
+
+}
