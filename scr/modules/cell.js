@@ -1,4 +1,6 @@
-export class Cell {
+export class Cell {   
+
+    nextType = "";
 
     constructor(x, y, size, type) {   
         this.x = x,
@@ -13,6 +15,14 @@ export class Cell {
 
     getType() {
         return this.type;
+    }
+
+    getNextType() {
+        return this.nextType;
+    }
+
+    setNextType(type) {
+        this.nextType = type; 
     }
 
     getCoord(coord) {

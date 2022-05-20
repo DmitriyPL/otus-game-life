@@ -101,11 +101,11 @@ export class Field {
             const neighboursTypes = this.getAllNeighboursTypes(cellX, cellY);
         
             if (cell.getType() === "dead" && neighboursTypes.alive === 3) {
-                cell.setType("alive");
+                cell.setNextType("alive");
                 this.aliveCells += 1;
                 this.stateChanged = true;
             } else if(cell.getType() === "alive" && (neighboursTypes.alive < 2 || neighboursTypes.alive > 3) ) {
-                cell.setType("dead");
+                cell.setNextType("dead");
                 this.aliveCells -= 1;
                 this.stateChanged = true;
             }
@@ -113,6 +113,17 @@ export class Field {
         });
 
         this.draw();
+
+        this.state.forEach( (cell) => {
+        
+            const type = cell.getType();
+            const nextType = cell.getNextType();
+
+            if (nextType != type && nextType != "") {
+                cell.setType(nextType);
+            }
+
+        });
     }
 
     getAllNeighboursTypes(cellX, cellY) {
