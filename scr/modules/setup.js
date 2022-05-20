@@ -1,5 +1,5 @@
 export const data = {
     "cellSize": 15,
-    "fieldSizeX": 3,
-    "fieldSizeY": 3
+    "fieldSizeX": 50,
+    "fieldSizeY": 50
 }

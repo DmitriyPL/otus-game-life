@@ -170,6 +170,7 @@ export class Field {
         
         this.state.forEach( (cell) => {
             cell.setType("dead");
+            cell.setNextType("");
         });
 
         this.draw();
