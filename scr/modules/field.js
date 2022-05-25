@@ -98,13 +98,13 @@ export class Field {
             const cellX = cell.getX();
             const cellY = cell.getY();
 
-            const neighboursTypes = this.getAllNeighboursTypes(cellX, cellY);
+            const aliveNeighbours = this.getAliveNeighbours(cellX, cellY);
         
-            if (cell.getType() === "dead" && neighboursTypes.alive === 3) {
+            if (cell.getType() === "dead" && aliveNeighbours === 3) {
                 cell.setNextType("alive");
                 this.aliveCells += 1;
                 this.stateChanged = true;
-            } else if(cell.getType() === "alive" && (neighboursTypes.alive < 2 || neighboursTypes.alive > 3) ) {
+            } else if(cell.getType() === "alive" && (aliveNeighbours < 2 || aliveNeighbours > 3) ) {
                 cell.setNextType("dead");
                 this.aliveCells -= 1;
                 this.stateChanged = true;
@@ -126,12 +126,9 @@ export class Field {
         });
     }
 
-    getAllNeighboursTypes(cellX, cellY) {
+    getAliveNeighbours(cellX, cellY) {
 
-        const neighboursTypes = {
-            "dead": 0,
-            "alive": 0
-        }
+        let alive = 0;
 
         const neighboursCoords = [ 
             [cellX - 1, cellY - 1],
@@ -150,11 +147,12 @@ export class Field {
 
             const cellType = this.getNeighbourType(x, y);
 
-            neighboursTypes[cellType] += 1;
-
+            if (cellType === "alive") {
+                alive += 1;
+            }
         }  
         
-        return neighboursTypes;
+        return alive;
     }
 
     getNeighbourType(x, y) {

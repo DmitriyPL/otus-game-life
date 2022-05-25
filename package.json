@@ -5,7 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix" 
   },
   "repository": {
     "type": "git",
@@ -19,6 +21,7 @@
   },
   "homepage": "https://github.com/DmitriyPL/otus-game-life#readme",
   "devDependencies": {
+    "eslint": "^8.16.0",
     "jest": "^28.1.0"
   },
   "dependencies": {
