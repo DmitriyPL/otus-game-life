@@ -10,5 +10,13 @@
     "sourceType": "module"
   },
   "plugins": ["jest"],
-  "rules": {}
+  "rules": {
+    "max-len": [
+      "error",
+      {
+        "ignoreComments": true,
+        "code": 120
+      }
+    ]
+  }
 }
