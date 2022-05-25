@@ -2,12 +2,26 @@ import { data as fieldParams } from "./modules/setup.js";
 import { Field } from "./modules/field.js";
 import { Cell } from "./modules/cell.js";
 
+function run(field) {
+  localStorage.setItem("stopGame", "false");
+
+  const refreshId = setInterval(() => {
+    field.changeState();
+    if (
+      field.getStateChanged() === false ||
+      localStorage.getItem("stopGame") === "true"
+    ) {
+      clearInterval(refreshId);
+    }
+  }, 100);
+}
+
 function init() {
   localStorage.setItem("stopGame", "false");
 
-  const fieldSizeX = fieldParams.fieldSizeX;
-  const fieldSizeY = fieldParams.fieldSizeY;
-  const cellSize = fieldParams.cellSize;
+  const { fieldSizeX } = fieldParams;
+  const { fieldSizeY } = fieldParams;
+  const { cellSize } = fieldParams;
 
   const canvas = document.getElementById("game-field");
 
@@ -31,20 +45,6 @@ function init() {
   btnStopGame.addEventListener("click", () => {
     localStorage.setItem("stopGame", "true");
   });
-}
-
-function run(field) {
-  localStorage.setItem("stopGame", "false");
-
-  let refreshId = setInterval(() => {
-    field.changeState();
-    if (
-      field.getStateChanged() === false ||
-      localStorage.getItem("stopGame") === "true"
-    ) {
-      clearInterval(refreshId);
-    }
-  }, 100);
 }
 
 init();

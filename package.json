@@ -7,7 +7,8 @@
   "scripts": {
     "test": "jest",
     "lint": "prettier --check . && eslint .",
-    "lint:fix": "prettier --write . && eslint . --fix"
+    "lint:fix": "prettier --write . && eslint . --fix",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -21,16 +22,25 @@
   },
   "homepage": "https://github.com/DmitriyPL/otus-game-life#readme",
   "devDependencies": {
+    "@babel/core": "^7.18.2",
     "@babel/preset-env": "^7.18.2",
+    "babel-jest": "^28.1.0",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-jest": "^26.2.2",
+    "husky": "^8.0.1",
     "jest": "^28.1.0",
     "jest-environment-jsdom": "^28.1.0",
+    "lint-staged": "^12.4.2",
     "prettier": "2.6.2"
   },
   "dependencies": {
     "@types/live-server": "^1.2.1",
-    "babel": "^6.23.0"
+    "babel": "^6.23.0",
+    "eslint-config-airbnb": "^19.0.4"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
   }
 }

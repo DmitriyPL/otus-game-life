@@ -1,9 +1,12 @@
 export class Field {
   state = [];
+
   aliveCells = 0;
+
   stateChanged = false;
 
   canvasX = 0;
+
   canvasY = 0;
 
   constructor(canvas, fieldSizeX, fieldSizeY, cellSize) {
@@ -29,18 +32,19 @@ export class Field {
   }
 
   init(Cell) {
-    for (let y = 0; y < this.fieldSizeY; y++) {
-      for (let x = 0; x < this.fieldSizeX; x++) {
+    for (let y = 0; y < this.fieldSizeY; y += 1) {
+      for (let x = 0; x < this.fieldSizeX; x += 1) {
         this.state.push(new Cell(x, y, this.cellSize, "dead"));
       }
     }
   }
 
   clickHandler(e) {
-    let x = e.pageX - this.canvasX;
-    let y = e.pageY - this.canvasY;
+    const x = e.pageX - this.canvasX;
+    const y = e.pageY - this.canvasY;
 
-    for (let cell of this.state) {
+    /* eslint-disable-next-line */
+    for (const cell of this.state) {
       const cellX = cell.getCoord("x");
       const cellY = cell.getCoord("y");
       const size = cell.getSize();
@@ -48,10 +52,10 @@ export class Field {
       if (y > cellY && y < cellY + size && x > cellX && x < cellX + size) {
         if (cell.getType() === "dead") {
           cell.setType("alive");
-          this.aliveCells++;
+          this.aliveCells += 1;
         } else {
           cell.setType("dead");
-          this.aliveCells--;
+          this.aliveCells -= 1;
         }
 
         this.draw();
@@ -105,7 +109,7 @@ export class Field {
       const type = cell.getType();
       const nextType = cell.getNextType();
 
-      if (nextType != type && nextType != "") {
+      if (nextType !== type && nextType !== "") {
         cell.setType(nextType);
       }
     });
@@ -125,7 +129,8 @@ export class Field {
       [cellX + 1, cellY + 1],
     ];
 
-    for (let coord of neighboursCoords) {
+    /* eslint-disable-next-line */
+    for (const coord of neighboursCoords) {
       const x = coord[0];
       const y = coord[1];
 
@@ -142,12 +147,11 @@ export class Field {
   getNeighbourType(x, y) {
     if (x < 0 || x > this.fieldSizeX - 1 || y < 0 || y > this.fieldSizeY - 1) {
       return "dead";
-    } else {
-      const findedCell = this.state.find(
-        (cell) => cell.getX() === x && cell.getY() === y
-      );
-      return findedCell.getType();
     }
+    const findedCell = this.state.find(
+      (cell) => cell.getX() === x && cell.getY() === y
+    );
+    return findedCell.getType();
   }
 
   clear() {

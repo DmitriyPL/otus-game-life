@@ -2,7 +2,10 @@ export class Cell {
   nextType = "";
 
   constructor(x, y, size, type) {
-    (this.x = x), (this.y = y), (this.size = size), (this.type = type);
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.type = type;
   }
 
   setType(type) {
