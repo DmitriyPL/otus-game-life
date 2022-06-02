@@ -1,43 +1,51 @@
 {
-  "name": "otus-game-life",
+  "name": "otus-weather-forecast",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "type": "module",
+  "main": "index.js",
   "scripts": {
     "test": "jest",
     "lint": "prettier --check . && eslint .",
     "lint:fix": "prettier --write . && eslint . --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "build": "webpack --node-env production",
+    "dev": "webpack serve --node-env development"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DmitriyPL/otus-game-life.git"
+    "url": "git+https://github.com/DmitriyPL/otus-weather-forecast.git"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/DmitriyPL/otus-game-life/issues"
+    "url": "https://github.com/DmitriyPL/otus-weather-forecast/issues"
   },
-  "homepage": "https://github.com/DmitriyPL/otus-game-life#readme",
+  "homepage": "https://github.com/DmitriyPL/otus-weather-forecast#readme",
   "devDependencies": {
     "@babel/core": "^7.18.2",
     "@babel/preset-env": "^7.18.2",
+    "@types/jest": "^27.5.1",
     "babel-jest": "^28.1.0",
+    "babel-loader": "^8.2.5",
+    "css-loader": "^6.7.1",
+    "css-minimizer-webpack-plugin": "^4.0.0",
+    "dotenv-webpack": "^7.1.0",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-jest": "^26.2.2",
+    "eslint-plugin-jest": "^26.4.2",
+    "html-loader": "^3.1.0",
+    "html-webpack-plugin": "^5.5.0",
     "husky": "^8.0.1",
     "jest": "^28.1.0",
     "jest-environment-jsdom": "^28.1.0",
     "lint-staged": "^12.4.2",
-    "prettier": "2.6.2"
-  },
-  "dependencies": {
-    "@types/live-server": "^1.2.1",
-    "babel": "^6.23.0",
-    "eslint-config-airbnb": "^19.0.4"
+    "mini-css-extract-plugin": "^2.6.0",
+    "prettier": "2.6.2",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.9.0"
   },
   "lint-staged": {
     "*.js": "eslint --fix",
