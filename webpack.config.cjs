@@ -6,14 +6,9 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { resolve } = require("path");
 
 module.exports = {
-  entry: {
-    index: "./src/index.js",
-    setup: "./src/setup.js",
-    field: "./src/Classes/field.js",
-    cell: "./src/Classes/cell.js",
-  },
+  entry: { index: "./src/index.js" },
   output: {
-    filename: "[name].bundle.js",
+    filename: "bundle.js",
     path: resolve(__dirname, "dist"),
     clean: true,
     environment: {
