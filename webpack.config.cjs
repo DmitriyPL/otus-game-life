@@ -6,15 +6,20 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { resolve } = require("path");
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: {
+    index: "./src/index.js",
+    setup: "./src/setup.js",
+    field: "./src/Classes/field.js",
+    cell: "./src/Classes/cell.js",
+  },
   output: {
-    filename: "main.js",
+    filename: "[name].bundle.js",
     path: resolve(__dirname, "dist"),
     clean: true,
     environment: {
       arrowFunction: false,
     },
-    assetModuleFilename: "images/[name][ext]",
+    // assetModuleFilename: "images/[name][ext]",
   },
   devtool:
     process.env.NODE_ENV === "development" ? "eval-source-map" : "source-map",
@@ -37,17 +42,17 @@ module.exports = {
           loader: "babel-loader",
         },
       },
-      {
-        test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
-      },
-      {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: "asset/resource",
-        generator: {
-          filename: "static/[hash][ext]",
-        },
-      },
+      // {
+      //   test: /\.css$/i,
+      //   use: [MiniCssExtractPlugin.loader, "css-loader"],
+      // },
+      // {
+      //   test: /\.(png|svg|jpg|jpeg|gif)$/i,
+      //   type: "asset/resource",
+      //   generator: {
+      //     filename: "static/[hash][ext]",
+      //   },
+      // },
       {
         test: /\.html$/i,
         loader: "html-loader",

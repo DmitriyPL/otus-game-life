@@ -1,5 +1,5 @@
 {
-  "name": "otus-weather-forecast",
+  "name": "otus-game-life",
   "version": "1.0.0",
   "description": "",
   "type": "module",
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DmitriyPL/otus-weather-forecast.git"
+    "url": "git+https://github.com/DmitriyPL/otus-game-life.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/DmitriyPL/otus-weather-forecast/issues"
+    "url": "https://github.com/DmitriyPL/otus-game-life/issues"
   },
-  "homepage": "https://github.com/DmitriyPL/otus-weather-forecast#readme",
+  "homepage": "https://github.com/DmitriyPL/otus-game-life#readme",
   "devDependencies": {
     "@babel/core": "^7.18.2",
     "@babel/preset-env": "^7.18.2",
@@ -50,5 +50,8 @@
   "lint-staged": {
     "*.js": "eslint --fix",
     "*.{js,css,md}": "prettier --write"
+  },
+  "dependencies": {
+    "autoprefixer": "10.4.5"
   }
 }
