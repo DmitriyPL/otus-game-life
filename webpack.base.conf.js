@@ -22,7 +22,6 @@ module.exports = {
   },
   entry: {
     main: PATHS.src,
-    slider: PATHS.src + "/js/slider.js",
   }, 
   output: {
     filename: "[name].js",
@@ -99,24 +98,6 @@ module.exports = {
       template: `${PAGES_DIR}/index.pug`,
       filename: "./index.html",
       chunks: ['main'],
-    }),
-
-    new HtmlWebpackPlugin({
-      template: `${PAGES_DIR}/feedback.pug`,
-      filename: "./feedback.html",
-      chunks: ['main'],
-    }),
-    
-    new HtmlWebpackPlugin({
-      template: `${PAGES_DIR}/record.pug`,
-      filename: "./record.html",
-      chunks: ['main'],
-    }),
-
-    new HtmlWebpackPlugin({
-      template: `${PAGES_DIR}/records.pug`,
-      filename: "./records.html",
-      chunks: ['main', 'slider'],
-    }),    
+    }),   
   ],
 };

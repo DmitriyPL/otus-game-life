@@ -1,6 +1,12 @@
-import { data as fieldParams } from "./setup.js";
-import { Field } from "./Classes/field.js";
-import { Cell } from "./Classes/cell.js";
+// SCSS
+import "./assets/scss/main.scss";
+
+// CSS
+import "./assets/css/normalize.css";
+
+import { data as fieldParams } from "./js/setup.js";
+import { Field } from "./js/field.js";
+import { Cell } from "./js/cell.js";
 
 function run(field) {
   localStorage.setItem("stopGame", "false");

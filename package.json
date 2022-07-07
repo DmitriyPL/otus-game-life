@@ -1,7 +1,7 @@
 {
   "name": "blog",
   "version": "1.0.0",
-  "description": "My blog",
+  "description": "Game life",
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --open --config ./webpack.dev.conf.js",
