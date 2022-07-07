@@ -2,9 +2,15 @@ extends ../layout/main
 
 block content
   section
+    form.filed-params
+      input#sizeX(value="50" required autofocus)
+      input#sizeY(value="50" required autofocus)
+      input#cellSize(value="15" required autofocus)
+      button#set-field-size Set field size
+  section
     canvas#game-field empty
   section
-      button#start-game Run
-      button#do-step Step
-      button#stop-game Stop
-      button#clear-field Clear
+    button#start-game Run
+    button#do-step Step
+    button#stop-game Stop
+    button#clear-field Clear

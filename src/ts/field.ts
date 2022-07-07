@@ -1,20 +1,35 @@
+import { Cell } from "./cell";
+
 export class Field {
-  state = [];
-
+  state: Cell[] = [];
   aliveCells = 0;
-
   stateChanged = false;
-
   canvasX = 0;
-
   canvasY = 0;
 
-  constructor(canvas, fieldSizeX, fieldSizeY, cellSize) {
+  canvas: HTMLCanvasElement;
+  fieldSizeX: number;
+  fieldSizeY: number;
+  cellSize: number;
+  ctx: CanvasRenderingContext2D;
+
+  constructor(
+    canvas: HTMLCanvasElement,
+    fieldSizeX: number,
+    fieldSizeY: number,
+    cellSize: number
+  ) {
     this.canvas = canvas;
     this.fieldSizeX = fieldSizeX;
     this.fieldSizeY = fieldSizeY;
     this.cellSize = cellSize;
-    this.ctx = this.canvas.getContext("2d");
+    this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
+  }
+
+  setFieldSize(x: number, y: number, cell: number) {
+    this.fieldSizeX = x;
+    this.fieldSizeY = y;
+    this.cellSize = cell;
   }
 
   setup() {
@@ -27,19 +42,15 @@ export class Field {
     this.canvas.addEventListener("click", this.clickHandler.bind(this));
   }
 
-  getAliveCells() {
+  getAliveCells(): number {
     return this.aliveCells;
   }
 
-  init(Cell) {
-    for (let y = 0; y < this.fieldSizeY; y += 1) {
-      for (let x = 0; x < this.fieldSizeX; x += 1) {
-        this.state.push(new Cell(x, y, this.cellSize, "dead"));
-      }
-    }
+  addCell(newCell: Cell) {
+    this.state.push(newCell);
   }
 
-  clickHandler(e) {
+  clickHandler(e: any) {
     const x = e.pageX - this.canvasX;
     const y = e.pageY - this.canvasY;
 
@@ -115,7 +126,7 @@ export class Field {
     });
   }
 
-  getAliveNeighbours(cellX, cellY) {
+  getAliveNeighbours(cellX: number, cellY: number) {
     let alive = 0;
 
     const neighboursCoords = [
@@ -144,14 +155,18 @@ export class Field {
     return alive;
   }
 
-  getNeighbourType(x, y) {
+  getNeighbourType(x: number, y: number): string {
     if (x < 0 || x > this.fieldSizeX - 1 || y < 0 || y > this.fieldSizeY - 1) {
       return "dead";
     }
     const findedCell = this.state.find(
       (cell) => cell.getX() === x && cell.getY() === y
     );
-    return findedCell.getType();
+    if (findedCell === undefined) {
+      return "dead";
+    } else {
+      return findedCell.getType();
+    }
   }
 
   clear() {

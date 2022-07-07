@@ -1,4 +1,4 @@
-import { Cell } from "../js/cell";
+import { Cell } from "../ts/cell";
 
 const cell = new Cell(0, 0, 15, "dead");
 
