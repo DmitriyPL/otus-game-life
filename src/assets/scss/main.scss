@@ -1,0 +1,63 @@
+@import "utils/vars";
+@import "utils/mixins";
+
+body {
+  background-color: $default-color;
+}
+
+main {
+  max-width: rem(1280);
+  min-width: rem(480);
+  margin: rem(16) auto;
+}
+
+section {
+  text-align: center;
+}
+
+.main-nav {
+  background-color: black;
+  box-shadow: 0 0 25px 0 black;
+
+  .main-nav__menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .main-nav__menu-item {
+      list-style-type: none;
+      margin: rem(20);
+
+      .main-nav__menu-item-link {
+        color: white;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.content-wrapper {
+  height: 80vh;
+}
+
+.form-wrapper {
+  display: inline-block;
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .form__item {
+      margin-top: rem(20);
+
+      .form__item-input {
+        margin-left: rem(10);
+      }
+
+      .form__item-button {
+        border-radius: rem(10);
+      }
+    }
+  }
+}
