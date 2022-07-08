@@ -12,6 +12,8 @@ function run(field: Field, gameSpeed: number) {
 
   const refreshId = setInterval(() => {
     field.changeState();
+    field.draw();
+    field.setNextType();
     if (
       field.getStateChanged() === false ||
       localStorage.getItem("stopGame") === "true"
@@ -96,12 +98,19 @@ function init() {
   const btnDoStep: HTMLElement = document.getElementById(
     "do-step"
   ) as HTMLElement;
-  btnDoStep.addEventListener("click", field.changeState.bind(field));
+  btnDoStep.addEventListener("click", function() {
+    field.changeState();
+    field.draw();
+    field.setNextType();
+  }); 
 
   const btnClearField: HTMLElement = document.getElementById(
     "clear-field"
   ) as HTMLElement;
-  btnClearField.addEventListener("click", field.clear.bind(field));
+  btnClearField.addEventListener("click", function() {
+    field.clear();
+    field.draw();
+  });
 
   const btnStartGame: HTMLElement = document.getElementById(
     "start-game"

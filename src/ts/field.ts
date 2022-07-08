@@ -98,8 +98,6 @@ export class Field {
       cell.setType("dead");
       cell.setNextType("");
     });
-
-    this.draw();
   }
 
   delCells() {
@@ -110,13 +108,19 @@ export class Field {
     this.state.forEach((cell) => {
       const x = cell.getCoord("x");
       const y = cell.getCoord("y");
-      const size = cell.getSize();
+      const size = this.cellSize;
 
       if (cell.getType() === "dead") {
         this.ctx.clearRect(x, y, size, size);
         this.ctx.strokeRect(x, y, size, size);
       } else {
-        this.ctx.fillRect(x, y, size, size);
+        if (cell.getNextType() === "dead"){
+          this.ctx.fillStyle = 'blue';
+          this.ctx.fillRect(x, y, size, size);
+        } else {
+          this.ctx.fillStyle = 'black';
+          this.ctx.fillRect(x, y, size, size);
+        }        
       }
     });
   }
@@ -142,10 +146,10 @@ export class Field {
         this.aliveCells -= 1;
         this.stateChanged = true;
       }
-    });
+    });    
+  }
 
-    this.draw();
-
+  setNextType() {
     this.state.forEach((cell) => {
       const type = cell.getType();
       const nextType = cell.getNextType();
@@ -167,7 +171,7 @@ export class Field {
     for (const cell of this.state) {
       const cellX = cell.getCoord("x");
       const cellY = cell.getCoord("y");
-      const size = cell.getSize();
+      const size = this.cellSize;
 
       if (y > cellY && y < cellY + size && x > cellX && x < cellX + size) {
         if (cell.getType() === "dead") {
