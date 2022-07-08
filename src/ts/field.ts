@@ -27,7 +27,7 @@ export class Field {
     this.canvas.addEventListener("click", this.clickHandler.bind(this));
   }
 
-  setFieldSize(x:number, y:number, cell:number) {
+  setFieldSize(x: number, y: number, cell: number) {
     this.fieldSizeX = x;
     this.fieldSizeY = y;
     this.cellSize = cell;
@@ -103,11 +103,11 @@ export class Field {
   }
 
   delCells() {
-    this.state.length = 0
-  }  
+    this.state.length = 0;
+  }
 
   draw() {
-    this.state.forEach( (cell) => {
+    this.state.forEach((cell) => {
       const x = cell.getCoord("x");
       const y = cell.getCoord("y");
       const size = cell.getSize();
@@ -156,8 +156,7 @@ export class Field {
     });
   }
 
-  clickHandler(ev: any) {
-
+  clickHandler(ev: MouseEvent) {
     this.canvasX = this.canvas.offsetLeft + this.canvas.clientLeft;
     this.canvasY = this.canvas.offsetTop + this.canvas.clientTop;
 
@@ -184,6 +183,5 @@ export class Field {
         break;
       }
     }
-  }  
-
+  }
 }
