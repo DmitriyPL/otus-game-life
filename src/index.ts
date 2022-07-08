@@ -4,11 +4,10 @@ import "./assets/scss/main.scss";
 // CSS
 import "./assets/css/normalize.css";
 
-import { data as fieldParams } from "./ts/setup";
 import { Field } from "./ts/field";
 import { Cell } from "./ts/cell";
 
-function run(field: Field) {
+function run(field: Field, gameSpeed: number) {
   localStorage.setItem("stopGame", "false");
 
   const refreshId = setInterval(() => {
@@ -19,55 +18,37 @@ function run(field: Field) {
     ) {
       clearInterval(refreshId);
     }
-  }, 100);
+  }, gameSpeed);
+
+  localStorage.setItem("refreshId", String(refreshId));
+
+  return refreshId
 }
 
-function init() {
-  localStorage.setItem("stopGame", "false");
+function drawField(field: Field) {
 
-  const { fieldSizeX, fieldSizeY, cellSize } = getFieldSize();
+  field.setupCanvas();
+  field.delCells();
 
-  const canvas: HTMLCanvasElement = document.getElementById(
-    "game-field"
-  ) as HTMLCanvasElement;
+  for (let y = 0; y < field.fieldSizeY; y += 1) {
+    for (let x = 0; x < field.fieldSizeX; x += 1) {
+      field.addCell(new Cell(x, y, field.cellSize, "dead"));
+    }
+  }
 
-  const field = new Field(canvas, fieldSizeX, fieldSizeY, cellSize);
-
-  drawField(field);
-
-  const btnChangeSize: HTMLElement = document.getElementById(
-    "set-field-size"
-  ) as HTMLElement;
-  btnChangeSize.addEventListener("click", () => {
-    changeFieldSize(field);
-  });
-
-  const btnDoStep: HTMLElement = document.getElementById(
-    "do-step"
-  ) as HTMLElement;
-  btnDoStep.addEventListener("click", field.changeState.bind(field));
-
-  const btnClearField: HTMLElement = document.getElementById(
-    "clear-field"
-  ) as HTMLElement;
-  btnClearField.addEventListener("click", field.clear.bind(field));
-
-  const btnStartGame: HTMLElement = document.getElementById(
-    "start-game"
-  ) as HTMLElement;
-  btnStartGame.addEventListener("click", () => {
-    run(field);
-  });
-
-  const btnStopGame: HTMLElement = document.getElementById(
-    "stop-game"
-  ) as HTMLElement;
-  btnStopGame.addEventListener("click", () => {
-    localStorage.setItem("stopGame", "true");
-  });
+  field.draw();
 }
 
-function getFieldSize() {
+function getGameSpeed() {
+
+  const gameSpeedEl: HTMLInputElement = document.getElementById(
+    "gameSpeed"
+  ) as HTMLInputElement;
+
+  return Number(gameSpeedEl.value)
+}
+
+function getFieldParams() {
   const inputXel: HTMLInputElement = document.getElementById(
     "sizeX"
   ) as HTMLInputElement;
@@ -88,22 +69,71 @@ function getFieldSize() {
 }
 
 function changeFieldSize(field: Field) {
-  const { fieldSizeX, fieldSizeY, cellSize } = getFieldSize();
-  field.setFieldSize(fieldSizeX, fieldSizeY, cellSize);
-  field.setup();
+  const { fieldSizeX, fieldSizeY, cellSize } = getFieldParams();
+  field.setFieldSize(fieldSizeX, fieldSizeY, cellSize);  
   drawField(field);
 }
 
-function drawField(field: Field) {
-  field.setup();
+function init() {
+  localStorage.setItem("stopGame", "false");
 
-  for (let y = 0; y < field.fieldSizeY; y += 1) {
-    for (let x = 0; x < field.fieldSizeX; x += 1) {
-      field.addCell(new Cell(x, y, field.cellSize, "dead"));
-    }
-  }
+  const { fieldSizeX, fieldSizeY, cellSize} = getFieldParams();
 
-  field.draw();
+  const canvas: HTMLCanvasElement = document.getElementById(
+    "game-field"
+  ) as HTMLCanvasElement;
+
+  let field = new Field(canvas, fieldSizeX, fieldSizeY, cellSize);
+
+  drawField(field);
+
+  const btnChangeSize: HTMLElement = document.getElementById(
+    "set-field-size"
+  ) as HTMLElement;
+  btnChangeSize.addEventListener("click", function(ev) {
+    ev.preventDefault();
+    changeFieldSize(field);
+  });
+
+  const btnDoStep: HTMLElement = document.getElementById(
+    "do-step"
+  ) as HTMLElement;
+  btnDoStep.addEventListener("click", field.changeState.bind(field));
+
+  const btnClearField: HTMLElement = document.getElementById(
+    "clear-field"
+  ) as HTMLElement;
+  btnClearField.addEventListener("click", field.clear.bind(field));
+
+  const btnStartGame: HTMLElement = document.getElementById(
+    "start-game"
+  ) as HTMLElement;
+  btnStartGame.addEventListener("click", function(ev) {
+    ev.preventDefault();
+    let gameSpeed = getGameSpeed();
+    run(field, gameSpeed);
+  });
+
+  const btnStopGame: HTMLElement = document.getElementById(
+    "stop-game"
+  ) as HTMLElement;
+  btnStopGame.addEventListener("click", function(ev) {
+    ev.preventDefault();
+    localStorage.setItem("stopGame", "true");
+  });
+
+  const btnGameSpeed: HTMLElement = document.getElementById(
+    "set-game-speed"
+  ) as HTMLElement;
+  btnGameSpeed.addEventListener("click", function(ev) {
+    ev.preventDefault();
+    localStorage.setItem("stopGame", "true");
+    let refreshId: number = Number(localStorage.getItem("refreshId"));
+    clearInterval(refreshId);
+    let gameSpeed = getGameSpeed();
+    run(field, gameSpeed);
+  });  
+
 }
 
 init();

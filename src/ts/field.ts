@@ -24,60 +24,90 @@ export class Field {
     this.fieldSizeY = fieldSizeY;
     this.cellSize = cellSize;
     this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
+    this.canvas.addEventListener("click", this.clickHandler.bind(this));
   }
 
-  setFieldSize(x: number, y: number, cell: number) {
+  setFieldSize(x:number, y:number, cell:number) {
     this.fieldSizeX = x;
     this.fieldSizeY = y;
     this.cellSize = cell;
   }
 
-  setup() {
+  setupCanvas() {
     this.canvas.width = this.fieldSizeX * this.cellSize;
     this.canvas.height = this.fieldSizeY * this.cellSize;
-
-    this.canvasX = this.canvas.offsetLeft + this.canvas.clientLeft;
-    this.canvasY = this.canvas.offsetTop + this.canvas.clientTop;
-
-    this.canvas.addEventListener("click", this.clickHandler.bind(this));
   }
 
   getAliveCells(): number {
     return this.aliveCells;
   }
 
+  getStateChanged() {
+    return this.stateChanged;
+  }
+
+  getAliveNeighbours(cellX: number, cellY: number) {
+    let alive = 0;
+
+    const neighboursCoords = [
+      [cellX - 1, cellY - 1],
+      [cellX - 1, cellY],
+      [cellX - 1, cellY + 1],
+      [cellX, cellY - 1],
+      [cellX, cellY + 1],
+      [cellX + 1, cellY - 1],
+      [cellX + 1, cellY],
+      [cellX + 1, cellY + 1],
+    ];
+
+    /* eslint-disable-next-line */
+    for (const coord of neighboursCoords) {
+      const x = coord[0];
+      const y = coord[1];
+
+      const cellType = this.getNeighbourType(x, y);
+
+      if (cellType === "alive") {
+        alive += 1;
+      }
+    }
+
+    return alive;
+  }
+
+  getNeighbourType(x: number, y: number): string {
+    if (x < 0 || x > this.fieldSizeX - 1 || y < 0 || y > this.fieldSizeY - 1) {
+      return "dead";
+    }
+    const findedCell = this.state.find(
+      (cell) => cell.getX() === x && cell.getY() === y
+    );
+    if (findedCell === undefined) {
+      return "dead";
+    } else {
+      return findedCell.getType();
+    }
+  }
+
   addCell(newCell: Cell) {
     this.state.push(newCell);
   }
 
-  clickHandler(e: any) {
-    const x = e.pageX - this.canvasX;
-    const y = e.pageY - this.canvasY;
+  clear() {
+    this.state.forEach((cell) => {
+      cell.setType("dead");
+      cell.setNextType("");
+    });
 
-    /* eslint-disable-next-line */
-    for (const cell of this.state) {
-      const cellX = cell.getCoord("x");
-      const cellY = cell.getCoord("y");
-      const size = cell.getSize();
-
-      if (y > cellY && y < cellY + size && x > cellX && x < cellX + size) {
-        if (cell.getType() === "dead") {
-          cell.setType("alive");
-          this.aliveCells += 1;
-        } else {
-          cell.setType("dead");
-          this.aliveCells -= 1;
-        }
-
-        this.draw();
-
-        break;
-      }
-    }
+    this.draw();
   }
 
+  delCells() {
+    this.state.length = 0
+  }  
+
   draw() {
-    this.state.forEach((cell) => {
+    this.state.forEach( (cell) => {
       const x = cell.getCoord("x");
       const y = cell.getCoord("y");
       const size = cell.getSize();
@@ -126,59 +156,34 @@ export class Field {
     });
   }
 
-  getAliveNeighbours(cellX: number, cellY: number) {
-    let alive = 0;
+  clickHandler(ev: any) {
 
-    const neighboursCoords = [
-      [cellX - 1, cellY - 1],
-      [cellX - 1, cellY],
-      [cellX - 1, cellY + 1],
-      [cellX, cellY - 1],
-      [cellX, cellY + 1],
-      [cellX + 1, cellY - 1],
-      [cellX + 1, cellY],
-      [cellX + 1, cellY + 1],
-    ];
+    this.canvasX = this.canvas.offsetLeft + this.canvas.clientLeft;
+    this.canvasY = this.canvas.offsetTop + this.canvas.clientTop;
+
+    const x = ev.pageX - this.canvasX;
+    const y = ev.pageY - this.canvasY;
 
     /* eslint-disable-next-line */
-    for (const coord of neighboursCoords) {
-      const x = coord[0];
-      const y = coord[1];
+    for (const cell of this.state) {
+      const cellX = cell.getCoord("x");
+      const cellY = cell.getCoord("y");
+      const size = cell.getSize();
 
-      const cellType = this.getNeighbourType(x, y);
+      if (y > cellY && y < cellY + size && x > cellX && x < cellX + size) {
+        if (cell.getType() === "dead") {
+          cell.setType("alive");
+          this.aliveCells += 1;
+        } else {
+          cell.setType("dead");
+          this.aliveCells -= 1;
+        }
 
-      if (cellType === "alive") {
-        alive += 1;
+        this.draw();
+
+        break;
       }
     }
+  }  
 
-    return alive;
-  }
-
-  getNeighbourType(x: number, y: number): string {
-    if (x < 0 || x > this.fieldSizeX - 1 || y < 0 || y > this.fieldSizeY - 1) {
-      return "dead";
-    }
-    const findedCell = this.state.find(
-      (cell) => cell.getX() === x && cell.getY() === y
-    );
-    if (findedCell === undefined) {
-      return "dead";
-    } else {
-      return findedCell.getType();
-    }
-  }
-
-  clear() {
-    this.state.forEach((cell) => {
-      cell.setType("dead");
-      cell.setNextType("");
-    });
-
-    this.draw();
-  }
-
-  getStateChanged() {
-    return this.stateChanged;
-  }
 }
