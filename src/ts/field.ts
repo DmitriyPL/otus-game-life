@@ -114,13 +114,13 @@ export class Field {
         this.ctx.clearRect(x, y, size, size);
         this.ctx.strokeRect(x, y, size, size);
       } else {
-        if (cell.getNextType() === "dead"){
-          this.ctx.fillStyle = 'blue';
+        if (cell.getNextType() === "dead") {
+          this.ctx.fillStyle = "blue";
           this.ctx.fillRect(x, y, size, size);
         } else {
-          this.ctx.fillStyle = 'black';
+          this.ctx.fillStyle = "black";
           this.ctx.fillRect(x, y, size, size);
-        }        
+        }
       }
     });
   }
@@ -146,7 +146,7 @@ export class Field {
         this.aliveCells -= 1;
         this.stateChanged = true;
       }
-    });    
+    });
   }
 
   setNextType() {

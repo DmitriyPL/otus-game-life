@@ -98,16 +98,16 @@ function init() {
   const btnDoStep: HTMLElement = document.getElementById(
     "do-step"
   ) as HTMLElement;
-  btnDoStep.addEventListener("click", function() {
+  btnDoStep.addEventListener("click", function () {
     field.changeState();
     field.draw();
     field.setNextType();
-  }); 
+  });
 
   const btnClearField: HTMLElement = document.getElementById(
     "clear-field"
   ) as HTMLElement;
-  btnClearField.addEventListener("click", function() {
+  btnClearField.addEventListener("click", function () {
     field.clear();
     field.draw();
   });
