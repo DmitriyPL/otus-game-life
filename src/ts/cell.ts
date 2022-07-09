@@ -1,19 +1,35 @@
 export class Cell {
   nextType = "";
-  x: number;
-  y: number;
-  size: number;
   type: string;
+  x = 0;
+  y = 0;
 
-  constructor(x: number, y: number, size: number, type: string) {
-    this.x = x;
-    this.y = y;
-    this.size = size;
+  constructor(type: string) {
     this.type = type;
   }
 
   setType(type: string) {
     this.type = type;
+  }
+
+  setNextType(type: string) {
+    this.nextType = type;
+  }
+
+  setX(x: number) {
+    this.x = x;
+  }
+
+  setY(y: number) {
+    this.y = y;
+  }
+
+  getX() {
+    return this.x;
+  }
+
+  getY() {
+    return this.y;
   }
 
   getType(): string {
@@ -22,31 +38,5 @@ export class Cell {
 
   getNextType(): string {
     return this.nextType;
-  }
-
-  setNextType(type: string) {
-    this.nextType = type;
-  }
-
-  getCoord(coord: string): number {
-    if (coord === "x") {
-      return this.x * this.size;
-    } else if (coord === "y") {
-      return this.y * this.size;
-    } else {
-      return 0;
-    }
-  }
-
-  getSize(): number {
-    return this.size;
-  }
-
-  getX(): number {
-    return this.x;
-  }
-
-  getY(): number {
-    return this.y;
   }
 }

@@ -5,15 +5,14 @@ import "./assets/scss/main.scss";
 import "./assets/css/normalize.css";
 
 import { Field } from "./ts/field";
-import { Cell } from "./ts/cell";
 
 function run(field: Field, gameSpeed: number) {
   localStorage.setItem("stopGame", "false");
 
   const refreshId = setInterval(() => {
-    field.changeState();
-    field.draw();
     field.setNextType();
+    field.draw();
+    field.setCurrentType();
     if (
       field.getStateChanged() === false ||
       localStorage.getItem("stopGame") === "true"
@@ -25,19 +24,6 @@ function run(field: Field, gameSpeed: number) {
   localStorage.setItem("refreshId", String(refreshId));
 
   return refreshId;
-}
-
-function drawField(field: Field) {
-  field.setupCanvas();
-  field.delCells();
-
-  for (let y = 0; y < field.fieldSizeY; y += 1) {
-    for (let x = 0; x < field.fieldSizeX; x += 1) {
-      field.addCell(new Cell(x, y, field.cellSize, "dead"));
-    }
-  }
-
-  field.draw();
 }
 
 function getGameSpeed() {
@@ -68,24 +54,61 @@ function getFieldParams() {
   return fieldParams;
 }
 
+function clickHandler(this: Field, ev: MouseEvent) {
+  this.canvasX = this.canvas.offsetLeft + this.canvas.clientLeft;
+  this.canvasY = this.canvas.offsetTop + this.canvas.clientTop;
+
+  const coordX = ev.pageX - this.canvasX;
+  const coordY = ev.pageY - this.canvasY;
+
+  const x = Math.trunc(coordX / this.cellSize);
+  const y = Math.trunc(coordY / this.cellSize);
+
+  const cell = this.state[y][x];
+
+  if (cell.getType() === "dead") {
+    cell.setType("alive");
+    this.aliveCells += 1;
+  } else {
+    cell.setType("dead");
+    this.aliveCells -= 1;
+  }
+
+  this.addCellForDrawing(cell);
+  this.draw();
+}
+
+function initField(canvas: HTMLCanvasElement) {
+  const { fieldSizeX, fieldSizeY, cellSize } = getFieldParams();
+
+  const field = new Field(canvas, fieldSizeX, fieldSizeY, cellSize);
+  field.initFieldState();
+  field.setupCanvas();
+
+  canvas.addEventListener("click", clickHandler.bind(field));
+
+  return field;
+}
+
 function changeFieldSize(field: Field) {
   const { fieldSizeX, fieldSizeY, cellSize } = getFieldParams();
+  field.delCells();
+  field.defaultSetup();
   field.setFieldSize(fieldSizeX, fieldSizeY, cellSize);
-  drawField(field);
+  field.initFieldState();
+  field.setupCanvas();
+  field.drawEmptyField();
 }
 
 function init() {
   localStorage.setItem("stopGame", "false");
 
-  const { fieldSizeX, fieldSizeY, cellSize } = getFieldParams();
-
   const canvas: HTMLCanvasElement = document.getElementById(
     "game-field"
   ) as HTMLCanvasElement;
 
-  const field = new Field(canvas, fieldSizeX, fieldSizeY, cellSize);
-
-  drawField(field);
+  const field = initField(canvas);
+  field.drawEmptyField();
 
   const btnChangeSize: HTMLElement = document.getElementById(
     "set-field-size"
@@ -99,17 +122,18 @@ function init() {
     "do-step"
   ) as HTMLElement;
   btnDoStep.addEventListener("click", function () {
-    field.changeState();
-    field.draw();
     field.setNextType();
+    field.draw();
+    field.setCurrentType();
   });
 
   const btnClearField: HTMLElement = document.getElementById(
     "clear-field"
   ) as HTMLElement;
   btnClearField.addEventListener("click", function () {
-    field.clear();
-    field.draw();
+    field.defaultSetup();
+    field.clearCellTypes();
+    field.drawEmptyField();
   });
 
   const btnStartGame: HTMLElement = document.getElementById(

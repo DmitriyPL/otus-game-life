@@ -6,15 +6,20 @@ function initFieldState(state: number[][]) {
   const field = new Field(canvas, state.length, state[0].length, 10);
 
   field.delCells();
+  field.initFieldState();
 
-  for (let i = 0; i < state.length; ++i) {
-    for (let j = 0; j < state[i].length; ++j) {
+  for (let y = 0; y < state.length; ++y) {
+    for (let x = 0; x < state[y].length; ++x) {
       let cellType = "dead";
-      if (state[i][j] === 1) {
+      if (state[y][x] === 1) {
         cellType = "alive";
       }
 
-      field.addCell(new Cell(i, j, 10, cellType));
+      const newCell = new Cell(cellType);
+      newCell.setX(x);
+      newCell.setY(y);
+      field.addCell(x, y, newCell);
+      field.analyzedCells.add(newCell);
     }
   }
 
@@ -30,7 +35,7 @@ describe("field to be instance of Field", () => {
 
   const field = initFieldState(stateInit);
 
-  it("to be instance of Cell", () => {
+  it("to be instance of Field", () => {
     expect(field).toBeInstanceOf(Field);
   });
 });
@@ -44,15 +49,15 @@ describe("setFieldSize", () => {
 
   const field = initFieldState(stateInit);
 
-  field.setFieldSize(3, 4, 10);
+  field.setFieldSize(2, 2, 10);
 
-  it("fieldSizeX is 3", () => {
-    expect(field.fieldSizeX).toBe(3);
+  it("fieldSizeX is 2", () => {
+    expect(field.fieldSizeX).toBe(2);
   });
-  it("fieldSizeY is 4", () => {
-    expect(field.fieldSizeY).toBe(4);
+  it("fieldSizeY is 2", () => {
+    expect(field.fieldSizeY).toBe(2);
   });
-  it("fieldSizeX is 3", () => {
+  it("cell size is 10", () => {
     expect(field.cellSize).toBe(10);
   });
 });
@@ -104,7 +109,7 @@ describe("getStateChanged", () => {
   });
 });
 
-describe("addCell / clear / delCells ", () => {
+describe("addCell / clearCellTypes / delCells ", () => {
   const stateInit = [
     [0, 0, 0],
     [1, 1, 1],
@@ -114,21 +119,22 @@ describe("addCell / clear / delCells ", () => {
   const field = initFieldState(stateInit);
 
   it("add cells on field", () => {
-    expect(field.state.length).toBe(9);
+    expect(field.state[0].length).toBe(3);
+    expect(field.state.length).toBe(3);
   });
 
-  it("add cells on field", () => {
-    field.clear();
-    expect(field.state[0].getType()).toBe("dead");
+  it("clear cell types on field", () => {
+    field.clearCellTypes();
+    expect(field.state[1][1].getType()).toBe("dead");
   });
 
-  it("add cells on field", () => {
+  it("del cells from field", () => {
     field.delCells();
     expect(field.state).toEqual([]);
   });
 });
 
-describe("getNeighbourType ", () => {
+describe("getCellType ", () => {
   const stateInit = [
     [0, 0, 0],
     [1, 1, 1],
@@ -139,14 +145,14 @@ describe("getNeighbourType ", () => {
 
   it("is a dead cell", () => {
     expect(field.getCellType(0, 0)).toBe("dead");
-    expect(field.getCellType(2, 1)).toBe("dead");
+    expect(field.getCellType(1, 0)).toBe("dead");
     expect(field.getCellType(2, 2)).toBe("dead");
   });
 
   it("is an alive cell", () => {
-    expect(field.getCellType(1, 0)).toBe("alive");
+    expect(field.getCellType(0, 1)).toBe("alive");
     expect(field.getCellType(1, 1)).toBe("alive");
-    expect(field.getCellType(1, 2)).toBe("alive");
+    expect(field.getCellType(2, 1)).toBe("alive");
   });
 });
 
@@ -160,11 +166,13 @@ describe("getAliveNeighbours ", () => {
   const field = initFieldState(stateInit);
 
   it("has 2 alive neighbours", () => {
-    expect(field.getAliveNeighbours(1, 1)).toBe(2);
+    const neighboursCoords = field.getNeighboursCoords(1, 1);
+    expect(field.getAliveNeighbours(neighboursCoords)).toBe(2);
   });
 
   it("has 1 alive neighbours", () => {
-    expect(field.getAliveNeighbours(0, 0)).toBe(1);
+    const neighboursCoords = field.getNeighboursCoords(0, 0);
+    expect(field.getAliveNeighbours(neighboursCoords)).toBe(1);
   });
 });
 
@@ -176,29 +184,29 @@ describe("changeState ", () => {
   ];
 
   const field = initFieldState(stateInit);
-  field.changeState();
-
-  it("has next type 'alive'", () => {
-    expect(field.state[1].getNextType()).toBe("alive");
-    expect(field.state[4].getNextType()).toBe("");
-    expect(field.state[7].getNextType()).toBe("alive");
-  });
-});
-
-describe("changeState ", () => {
-  const stateInit = [
-    [0, 0, 0],
-    [1, 1, 1],
-    [0, 0, 0],
-  ];
-
-  const field = initFieldState(stateInit);
-  field.changeState();
   field.setNextType();
 
+  it("has next type 'alive'", () => {
+    expect(field.state[0][1].getNextType()).toBe("alive");
+    expect(field.state[1][1].getNextType()).toBe("");
+    expect(field.state[2][1].getNextType()).toBe("alive");
+  });
+});
+
+describe("changeState ", () => {
+  const stateInit = [
+    [0, 0, 0],
+    [1, 1, 1],
+    [0, 0, 0],
+  ];
+
+  const field = initFieldState(stateInit);
+  field.setNextType();
+  field.setCurrentType();
+
   it("has type 'alive'", () => {
-    expect(field.state[1].getType()).toBe("alive");
-    expect(field.state[4].getType()).toBe("alive");
-    expect(field.state[7].getType()).toBe("alive");
+    expect(field.state[0][1].getType()).toBe("alive");
+    expect(field.state[1][1].getType()).toBe("alive");
+    expect(field.state[2][1].getType()).toBe("alive");
   });
 });
