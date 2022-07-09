@@ -65,7 +65,7 @@ export class Field {
       const x = coord[0];
       const y = coord[1];
 
-      const cellType = this.getNeighbourType(x, y);
+      const cellType = this.getCellType(x, y);
 
       if (cellType === "alive") {
         alive += 1;
@@ -75,7 +75,7 @@ export class Field {
     return alive;
   }
 
-  getNeighbourType(x: number, y: number): string {
+  getCellType(x: number, y: number): string {
     if (x < 0 || x > this.fieldSizeX - 1 || y < 0 || y > this.fieldSizeY - 1) {
       return "dead";
     }
