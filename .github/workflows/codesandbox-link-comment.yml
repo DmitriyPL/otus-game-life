@@ -9,6 +9,7 @@ on:
 
 jobs:
   codesandbox-comment:
+    permissions: write-all
     name: Add codesandbox link comment
     runs-on: ubuntu-latest
     steps:
