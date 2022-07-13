@@ -18,6 +18,8 @@ function run(field: Field, gameSpeed: number) {
       localStorage.getItem("stopGame") === "true"
     ) {
       clearInterval(refreshId);
+      field.defaultSetup();
+      field.clearCellTypes();
     }
   }, gameSpeed);
 
