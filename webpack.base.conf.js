@@ -22,7 +22,6 @@ module.exports = {
   },
   entry: {
     main: PATHS.src,
-    slider: PATHS.src + "/js/slider.js",
   }, 
   output: {
     filename: "[name].js",
@@ -45,8 +44,14 @@ module.exports = {
       {
         test: /\.js$/i,
         loader: "babel-loader",
-        exclude: "/node_modules/",
+        exclude: /node_modules/,
       },
+
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },      
 
       {
         test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/i,
@@ -77,6 +82,7 @@ module.exports = {
   },
 
   resolve: {
+    extensions: ['.ts', '.js'],
     alias: {
       "~": PATHS.src,
     },
@@ -99,24 +105,6 @@ module.exports = {
       template: `${PAGES_DIR}/index.pug`,
       filename: "./index.html",
       chunks: ['main'],
-    }),
-
-    new HtmlWebpackPlugin({
-      template: `${PAGES_DIR}/feedback.pug`,
-      filename: "./feedback.html",
-      chunks: ['main'],
-    }),
-    
-    new HtmlWebpackPlugin({
-      template: `${PAGES_DIR}/record.pug`,
-      filename: "./record.html",
-      chunks: ['main'],
-    }),
-
-    new HtmlWebpackPlugin({
-      template: `${PAGES_DIR}/records.pug`,
-      filename: "./records.html",
-      chunks: ['main', 'slider'],
-    }),    
+    }),   
   ],
 };
