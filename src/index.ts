@@ -13,10 +13,9 @@ function run(field: Field, gameSpeed: number) {
     field.setNextType();
     field.draw();
     field.setCurrentType();
-    if (
-      field.getStateChanged() === false ||
-      localStorage.getItem("stopGame") === "true"
-    ) {
+    if (localStorage.getItem("stopGame") === "true") {
+      clearInterval(refreshId);
+    } else if (field.getStateChanged() === false) {
       clearInterval(refreshId);
       field.defaultSetup();
       field.clearCellTypes();
